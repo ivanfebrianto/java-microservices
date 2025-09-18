@@ -8,27 +8,27 @@ import lombok.Data;
 public class ApiResponse<T> {
 
     private int status;
-    private boolean success;
+    private boolean isSuccess;
     private T data;
     private ApiErrorResponse error;
     private Meta meta;
 
     // ✅ Constructors for success and error
-    public ApiResponse(int status, boolean success, T data) {
+    public ApiResponse(int status, boolean isSuccess, T data) {
         this.status = status;
-        this.success = success;
+        this.isSuccess = isSuccess;
         this.data = data;
     }
 
-    public ApiResponse(int status, boolean success, ApiErrorResponse error) {
+    public ApiResponse(int status, boolean isSuccess, ApiErrorResponse error) {
         this.status = status;
-        this.success = success;
+        this.isSuccess = isSuccess;
         this.error = error;
     }
 
-    public ApiResponse(int status, boolean success, T data, Meta meta) {
+    public ApiResponse(int status, boolean isSuccess, T data, Meta meta) {
         this.status = status;
-        this.success = success;
+        this.isSuccess = isSuccess;
         this.data = data;
         this.meta = meta;
     }

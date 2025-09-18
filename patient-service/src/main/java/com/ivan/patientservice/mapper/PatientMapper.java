@@ -6,7 +6,7 @@ import com.ivan.patientservice.entity.Patient;
 import com.ivan.patientservice.enums.Gender;
 
 import java.time.LocalDate;
-import java.util.UUID;
+
 
 public class PatientMapper {
     public static PatientResponseDTO toPatientResponseDTO(Patient patient){
@@ -16,6 +16,7 @@ public class PatientMapper {
         patientResponseDTO.setLastName(patient.getLastName());
         patientResponseDTO.setEmail(patient.getEmail());
         patientResponseDTO.setAddress(patient.getAddress());
+        patientResponseDTO.setPhoneNumber(patient.getPhoneNumber());
         patientResponseDTO.setGender(patient.getGender().toString());
         patientResponseDTO.setDateOfBirth(patient.getDateOfBirth().toString());
         return patientResponseDTO;

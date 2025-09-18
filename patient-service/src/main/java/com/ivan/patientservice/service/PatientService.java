@@ -4,7 +4,9 @@ import com.ivan.patientservice.dto.PatientRequestDTO;
 import com.ivan.patientservice.dto.PatientResponseDTO;
 import com.ivan.patientservice.entity.Patient;
 import com.ivan.patientservice.enums.Gender;
+import com.ivan.patientservice.exception.DuplicateEmailException;
 import com.ivan.patientservice.exception.PatientNotFoundException;
+import com.ivan.patientservice.grpc.BillingServiceGrpcClient;
 import com.ivan.patientservice.mapper.PatientMapper;
 import com.ivan.patientservice.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +21,12 @@ import java.util.UUID;
 public class PatientService {
 
     private final PatientRepository patientRepository;
+    private final BillingServiceGrpcClient billingServiceGrpcClient;
 
     @Autowired
-    public PatientService(PatientRepository patientRepository) {
+    public PatientService(PatientRepository patientRepository, BillingServiceGrpcClient billingServiceGrpcClient) {
         this.patientRepository = patientRepository;
+        this.billingServiceGrpcClient = billingServiceGrpcClient;
     }
 
     public List<PatientResponseDTO> getPatients(){
@@ -31,9 +35,26 @@ public class PatientService {
     }
 
     public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO){
-        Patient patient = patientRepository.save(PatientMapper.toEntity(patientRequestDTO));
-        return PatientMapper.toPatientResponseDTO(patient);
+        // Check if email exists
+        if(patientRepository.existsByEmail(patientRequestDTO.getEmail())){
+            throw new DuplicateEmailException(patientRequestDTO.getEmail());
+        }
+        // Save patient
+        try {
+            Patient newPatient = patientRepository.save(PatientMapper.toEntity(patientRequestDTO));
+            billingServiceGrpcClient.createBillingAccount(
+                    newPatient.getId().toString(),
+                    newPatient.getFirstName() +" "+ newPatient.getLastName(),
+                    newPatient.getEmail(),
+                    newPatient.getPhoneNumber(),
+                    newPatient.getAddress());
+            return PatientMapper.toPatientResponseDTO(newPatient);
+        } catch (DataIntegrityViolationException e) {
+            // Handle race condition
+            throw new DuplicateEmailException(patientRequestDTO.getEmail());
+        }
     }
+
 
     public PatientResponseDTO updatePatient(UUID id,PatientRequestDTO patientRequestDTO){
         // 1️⃣ Check Patient with such ID Exist or Not

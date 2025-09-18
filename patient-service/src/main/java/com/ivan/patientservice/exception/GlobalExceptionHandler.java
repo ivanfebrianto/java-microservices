@@ -16,61 +16,118 @@ import java.util.Map;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Handle validation errors
+    // 1️⃣ Handle validation errors from @Valid
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+        Map<String, String> fieldErrors = new HashMap<>();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.put(error.getField(), error.getDefaultMessage());
+            fieldErrors.put(error.getField(), error.getDefaultMessage());
         }
-        String details = errors.toString();
 
-        ApiErrorResponse apiError = new ApiErrorResponse(
+        ApiErrorResponse errorResponse = new ApiErrorResponse(
                 "VALIDATION_ERROR",
                 "Validation failed",
-                details
+                fieldErrors.toString()
         );
 
         ApiResponse<Object> response = new ApiResponse<>(
                 HttpStatus.BAD_REQUEST.value(),
                 false,
-                apiError
+                errorResponse
         );
 
         return ResponseEntity.badRequest().body(response);
     }
 
+    // 2️⃣ Handle duplicate email / unique constraint violations
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<Object> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("status", 400);
-        body.put("success", false);
+    public ResponseEntity<ApiResponse<Object>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        String message = "Data integrity violation occurred.";
+        String code = "DUPLICATE_DATA";
 
-        Map<String, String> error = new HashMap<>();
-        error.put("code", "DUPLICATE_DATA");
-
-        // check if it's the email constraint
-        if (ex.getMessage().toLowerCase().contains("email")) {
-            error.put("message", "Duplicate email found. Please use another email.");
-        } else {
-            error.put("message", "Data integrity violation occurred.");
+        // check if it's email constraint
+        if (ex.getMessage() != null && ex.getMessage().toLowerCase().contains("email")) {
+            message = "Duplicate email found. Please use another email.";
+            code = "DUPLICATE_EMAIL";
         }
 
-        body.put("error", error);
-        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+        ApiErrorResponse errorResponse = new ApiErrorResponse(code, message, ex.getMostSpecificCause().getMessage());
+
+        ApiResponse<Object> response = new ApiResponse<>(
+                HttpStatus.BAD_REQUEST.value(),
+                false,
+                errorResponse
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
+    // 3️⃣ Handle not found exceptions
     @ExceptionHandler(PatientNotFoundException.class)
     public ResponseEntity<ApiResponse<Object>> handlePatientNotFound(PatientNotFoundException ex) {
-        ApiErrorResponse error = new ApiErrorResponse("PATIENT_NOT_FOUND", ex.getMessage(), "Check the patient ID and try again.");
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(new ApiResponse<>(404, false, error));
+        ApiErrorResponse errorResponse = new ApiErrorResponse(
+                "PATIENT_NOT_FOUND",
+                ex.getMessage(),
+                "Check the patient ID and try again."
+        );
+
+        ApiResponse<Object> response = new ApiResponse<>(
+                HttpStatus.NOT_FOUND.value(),
+                false,
+                errorResponse
+        );
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
+    // 4️⃣ Handle IllegalArgumentException (e.g., service-level checks)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<Object>> handleIllegalArgument(IllegalArgumentException ex) {
+        ApiErrorResponse errorResponse = new ApiErrorResponse(
+                "INVALID_ARGUMENT",
+                ex.getMessage(),
+                "Check your request payload and try again."
+        );
+
+        ApiResponse<Object> response = new ApiResponse<>(
+                HttpStatus.BAD_REQUEST.value(),
+                false,
+                errorResponse
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    // 5️⃣ Catch-all for any other exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleGenericException(Exception ex) {
-        ApiErrorResponse error = new ApiErrorResponse("INTERNAL_SERVER_ERROR", ex.getMessage(), "Unexpected error occurred.");
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ApiResponse<>(500, false, error));
+        ApiErrorResponse errorResponse = new ApiErrorResponse(
+                "INTERNAL_SERVER_ERROR",
+                ex.getMessage(),
+                "Unexpected error occurred."
+        );
+
+        ApiResponse<Object> response = new ApiResponse<>(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                false,
+                errorResponse
+        );
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
+    @ExceptionHandler(DuplicateEmailException.class)
+    public ResponseEntity<ApiResponse<Object>> handleDuplicateEmail(DuplicateEmailException ex) {
+        ApiErrorResponse errorResponse = new ApiErrorResponse(
+                "DUPLICATE_EMAIL",
+                ex.getMessage(),
+                "Patient with this email already exists."
+        );
+        ApiResponse<Object> response = new ApiResponse<>(
+                HttpStatus.BAD_REQUEST.value(),
+                false,
+                errorResponse
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
 }
