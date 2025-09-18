@@ -1,0 +1,4 @@
+### DELETE PATIENT ENTITY
+DELETE http://localhost:4000/api/patient-service/v1/delete-patient/09bbd902-6f9d-4d04-9143-36946008ec6d
+
+###

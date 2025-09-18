@@ -1,0 +1,15 @@
+### UPDATE EXISITING PATIENT ENTITY
+PUT http://localhost:4000/api/patient-service/v1/update-patient/af433fad-0ee3-406c-816d-3a4aa414f538
+Content-Type: application/json
+
+{
+  "firstName": "Rina",
+  "lastName": "Kusuma",
+  "phoneNumber": "+62 813-9876-5432",
+  "email": "john.doe@example.com",
+  "address": "Jl. Sudirman No. 123, Jakarta",
+  "dateOfBirth": "1990-05-15",
+  "gender": "MALE"
+}
+
+###

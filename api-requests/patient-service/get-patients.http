@@ -1,0 +1,4 @@
+### GET ALL PATIENT ENTITY
+GET http://localhost:4000/api/patient-service/v1/get-patients
+
+###

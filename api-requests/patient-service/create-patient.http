@@ -1,0 +1,15 @@
+### Create a new patient entity
+POST http://localhost:4000/api/patient-service/v1/create-patient
+Content-Type: application/json
+
+{
+  "firstName": "Johnathan",
+  "lastName": "Johnathan",
+  "phoneNumber": "+6281234567890",
+  "email": "john.doe@example.com",
+  "address": "Jl. Sudirman No. 123, Jakarta",
+  "dateOfBirth": "1990-05-15",
+  "gender": "MALE"
+}
+
+###

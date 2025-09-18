@@ -1,0 +1,11 @@
+### gRPC Request
+GRPC localhost:9001/BillingService/createBillingAccount
+
+
+{
+  "patientId": "123456",
+  "name": "Dono DKI",
+  "email": "dono.dki@example.com",
+  "phoneNumber": "+62 85157326802",
+  "address": "Jl. Ciputat no 12, Kab.Tangerang Selatan"
+}
