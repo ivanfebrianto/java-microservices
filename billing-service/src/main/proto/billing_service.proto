@@ -17,6 +17,6 @@ message BillingRequest{
 
 message BillingResponse{
   string accountId = 1;
-  string status = 2;
-
+  string patientId = 2;
+  string status = 3;
 }
