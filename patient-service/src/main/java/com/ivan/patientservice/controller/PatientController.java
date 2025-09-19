@@ -33,7 +33,7 @@ public class PatientController {
     public ResponseEntity<ApiResponse<List<PatientResponseDTO>>> getPatients() {
         List<PatientResponseDTO> patients = patientService.getPatients();
 
-        Meta meta = new Meta(1, patients.size(), 1, patients.size()); // placeholder for now
+        Meta meta = new Meta(1, patients.size(), 1, patients.size());
 
         ApiResponse<List<PatientResponseDTO>> response =
                 new ApiResponse<>(200, true, patients, meta);

@@ -9,7 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="billing-service" />
       </profile>
-      <profile name="Annotation profile for patient-service" enabled="true">
+      <profile name="Annotation profile for doctor-service" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -17,6 +17,7 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.38/lombok-1.18.38.jar" />
         </processorPath>
         <module name="patient-service" />
+        <module name="doctor-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -27,6 +28,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="billing-service" options="-parameters" />
+      <module name="doctor-service" options="-parameters" />
       <module name="patient-service" options="-parameters" />
     </option>
   </component>
