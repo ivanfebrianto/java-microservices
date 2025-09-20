@@ -1,0 +1,4 @@
+### GET PATIENT ENTITY BY ID
+GET http://localhost:4000/api/patient-service/v1/get-patient/5147a0eb-ea3c-42aa-b942-7e4144243038
+
+###

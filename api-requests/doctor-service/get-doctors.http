@@ -1,4 +1,4 @@
-### GET request to example server
+### GET ALL DOCTOR ENTITY
 GET http://localhost:4005/api/doctor-service/v1/get-doctors
 
 ###

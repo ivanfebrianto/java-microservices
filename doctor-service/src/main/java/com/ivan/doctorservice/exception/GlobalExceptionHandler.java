@@ -63,12 +63,12 @@ public class GlobalExceptionHandler {
     }
 
     // 3️⃣ Handle not found exceptions
-    @ExceptionHandler(PatientNotFoundException.class)
-    public ResponseEntity<ApiResponse<Object>> handlePatientNotFound(PatientNotFoundException ex) {
+    @ExceptionHandler(DoctorNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleDoctorNotFound(DoctorNotFoundException ex) {
         ApiErrorResponse errorResponse = new ApiErrorResponse(
-                "PATIENT_NOT_FOUND",
+                "DOCTOR_NOT_FOUND",
                 ex.getMessage(),
-                "Check the patient ID and try again."
+                "Check the doctor ID and try again."
         );
 
         ApiResponse<Object> response = new ApiResponse<>(
@@ -120,7 +120,7 @@ public class GlobalExceptionHandler {
         ApiErrorResponse errorResponse = new ApiErrorResponse(
                 "DUPLICATE_EMAIL",
                 ex.getMessage(),
-                "Patient with this email already exists."
+                "Doctor with this email already exists."
         );
         ApiResponse<Object> response = new ApiResponse<>(
                 HttpStatus.BAD_REQUEST.value(),

@@ -1,5 +1,6 @@
 package com.ivan.doctorservice.mapper;
 
+import com.ivan.doctorservice.dto.DoctorRequestDTO;
 import com.ivan.doctorservice.dto.DoctorResponseDTO;
 import com.ivan.doctorservice.entity.Doctor;
 import com.ivan.doctorservice.enums.Status;
@@ -19,14 +20,13 @@ public class DoctorMapper {
         return doctorResponseDTO;
     }
 
-    public static Doctor toEntity(DoctorResponseDTO doctorResponseDTO){
+    public static Doctor toEntity(DoctorRequestDTO doctorRequestDTO){
         Doctor doctor = new Doctor();
-        doctor.setId(doctorResponseDTO.getId());
-        doctor.setFirstName(doctorResponseDTO.getFirstName());
-        doctor.setLastName(doctorResponseDTO.getLastName());
-        doctor.setEmail(doctorResponseDTO.getEmail());
-        doctor.setPhoneNumber(doctorResponseDTO.getPhoneNumber());
-        doctor.setStatus(Status.valueOf(doctorResponseDTO.getStatus().toUpperCase()));
+        doctor.setFirstName(doctorRequestDTO.getFirstName());
+        doctor.setLastName(doctorRequestDTO.getLastName());
+        doctor.setEmail(doctorRequestDTO.getEmail());
+        doctor.setPhoneNumber(doctorRequestDTO.getPhoneNumber());
+        doctor.setStatus(Status.ACTIVE);
         doctor.setJoinDate(LocalDate.now());
         return doctor;
     }

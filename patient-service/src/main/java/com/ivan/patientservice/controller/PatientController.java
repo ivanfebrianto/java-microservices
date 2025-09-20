@@ -41,6 +41,17 @@ public class PatientController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("get-patient/{id}")
+    @Operation(summary = "GET PATIENT BY ID")
+    public ResponseEntity<ApiResponse<PatientResponseDTO>> getPatientById(@PathVariable UUID id){
+        PatientResponseDTO patientResponseDTO = patientService.getPatientById(id);
+        ApiResponse<PatientResponseDTO> response =
+                new ApiResponse<>(200, true, patientResponseDTO, null);
+
+        return ResponseEntity.ok(response);
+    }
+
+
     @PostMapping("create-patient")
     @Operation(summary = "CREATE PATIENT")
     public ResponseEntity<ApiResponse<PatientResponseDTO>> createPatient(

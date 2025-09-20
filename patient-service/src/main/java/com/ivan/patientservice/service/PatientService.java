@@ -9,6 +9,7 @@ import com.ivan.patientservice.exception.PatientNotFoundException;
 import com.ivan.patientservice.grpc.BillingServiceGrpcClient;
 import com.ivan.patientservice.mapper.PatientMapper;
 import com.ivan.patientservice.repository.PatientRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Slf4j
 @Service
 public class PatientService {
 
@@ -32,6 +34,12 @@ public class PatientService {
     public List<PatientResponseDTO> getPatients(){
         List<Patient> patients = patientRepository.findAll();
         return patients.stream().map(PatientMapper::toPatientResponseDTO).toList();
+    }
+
+    public PatientResponseDTO getPatientById(UUID id){
+        log.info("Looking for patient with ID: '{}'", id.toString());
+        Patient patient = patientRepository.findById(id).orElseThrow(()-> new PatientNotFoundException("Patient not found with id " + id));
+        return PatientMapper.toPatientResponseDTO(patient);
     }
 
     public PatientResponseDTO createPatient(PatientRequestDTO patientRequestDTO){
