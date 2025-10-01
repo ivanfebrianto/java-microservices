@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "appointment";
+
+service AppointmentService{
+
+  // Create a new appointment
+  rpc createAppointment (AppointmentRequest) returns (AppointmentResponse);
+  // Get appointments by patient
+  rpc getAppointmentsByPatient (GetAppointmentsByPatientRequest) returns (AppointmentsListResponse);
+
+  // Get appointments by doctor
+  rpc getAppointmentsByDoctor (GetAppointmentsByDoctorRequest) returns (AppointmentsListResponse);
+
+}
+
+// Request for create
+message AppointmentRequest{
+  string patientId = 1;
+  string doctorId = 2;
+  string appointmentDate = 3;
+  string reason=4;
+}
+
+// Response for create
+message AppointmentResponse{
+  string appointmentId = 1;
+  string patientId = 2;
+  string doctorId = 3;
+  string status = 4;
+}
+
+message GetAppointmentsByPatientRequest{
+  string patientId = 1;
+}
+
+message GetAppointmentsByDoctorRequest{
+  string doctorId = 1;
+}
+
+// Reusable appointment object
+message Appointment{
+  string appointmentId = 1;
+  string patientId = 2;
+  string doctorId = 3;
+  string appointmentDate = 4;
+  string status = 5;
+  string reason = 6;
+}
+
+message AppointmentsListResponse{
+  repeated Appointment appointments = 1;
+}

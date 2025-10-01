@@ -1,0 +1,7 @@
+### GET APPOINTMENT BY PATIENT
+GRPC localhost:9002/AppointmentService/getAppointmentsByPatient
+Content-Type: application/json
+
+{
+"patientId": "5147a0eb-ea3c-42aa-b942-7e4144243038"
+}

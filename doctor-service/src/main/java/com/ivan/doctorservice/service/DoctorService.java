@@ -38,6 +38,4 @@ public class DoctorService {
             throw new DuplicateEmailException(doctorRequestDTO.getEmail());
         }
     }
-
-
 }

@@ -1,0 +1,9 @@
+### GET APPOINTMENT BY DOCTOR
+GRPC localhost:9002/AppointmentService/getAppointmentsByDoctor
+Content-Type: application/json
+
+{
+  "doctorId": "2f5f72c0-a055-4719-be0a-ed3097ee9bdc"
+}
+
+###

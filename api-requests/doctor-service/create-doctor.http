@@ -3,10 +3,10 @@ POST http://localhost:4005/api/doctor-service/v1/create-doctor
 Content-Type: application/json
 
 {
-  "firstName": "John",
-  "lastName": "Mayer",
+  "firstName": "testing",
+  "lastName": "testing",
   "phoneNumber": "+62856335127866",
-  "email": "john.mayer@hospital.com"
+  "email": "testing.testing@hospital.com"
 }
 
 ###

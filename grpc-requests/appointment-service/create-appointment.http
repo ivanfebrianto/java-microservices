@@ -1,0 +1,10 @@
+### GET request to example server
+GRPC localhost:9002/AppointmentService/createAppointment
+Content-Type: application/json
+
+{
+  "patientId": "5147a0eb-ea3c-42aa-b942-7e4144243038",
+  "doctorId": "2f5f72c0-a055-4719-be0a-ed3097ee9bdc",
+  "appointmentDate": "2025-10-01T10:30:00",
+  "reason": "General checkup"
+}
