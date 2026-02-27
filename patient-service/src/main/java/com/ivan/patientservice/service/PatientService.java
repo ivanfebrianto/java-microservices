@@ -65,16 +65,16 @@ public class PatientService {
 
 
     public PatientResponseDTO updatePatient(UUID id,PatientRequestDTO patientRequestDTO){
-        // 1️⃣ Check Patient with such ID Exist or Not
+        // 1. Check Patient with such ID Exist or Not
          Patient patient = patientRepository.findById(id).orElseThrow(()-> new PatientNotFoundException("Patient not found with id " + id));
 
-        // 2️⃣ If yes, Check Again if the new Email already exist for another patient and have different ID
+        // 2. If yes, Check Again if the new Email already exist for another patient and have different ID
         Optional<Patient> existingPatientWithEmail = patientRepository.findByEmail(patientRequestDTO.getEmail());
         if (existingPatientWithEmail.isPresent() && !existingPatientWithEmail.get().getId().equals(id)) {
             throw new DataIntegrityViolationException("Duplicate email found");
         }
 
-        // 3️⃣ Update patient fields
+        // 3. Update patient fields
         patient.setFirstName(patientRequestDTO.getFirstName());
         patient.setLastName(patientRequestDTO.getLastName());
         patient.setEmail(patientRequestDTO.getEmail());

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL) // don’t serialize null fields
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
 
     private int status;
@@ -13,7 +13,7 @@ public class ApiResponse<T> {
     private ApiErrorResponse error;
     private Meta meta;
 
-    // ✅ Constructors for success and error
+    // Constructors for success and error
     public ApiResponse(int status, boolean isSuccess, T data) {
         this.status = status;
         this.isSuccess = isSuccess;

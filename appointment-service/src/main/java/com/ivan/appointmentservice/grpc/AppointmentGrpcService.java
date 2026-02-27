@@ -24,7 +24,6 @@ public class AppointmentGrpcService extends AppointmentServiceGrpc.AppointmentSe
 
     private final AppointmentInfoRepository appointmentInfoRepository;
 
-
     @Autowired
     public AppointmentGrpcService(AppointmentInfoRepository appointmentInfoRepository) {
         this.appointmentInfoRepository = appointmentInfoRepository;
@@ -33,7 +32,8 @@ public class AppointmentGrpcService extends AppointmentServiceGrpc.AppointmentSe
     @Override
     public void createAppointment(AppointmentRequest appointmentRequest, StreamObserver<AppointmentResponse> responseObserver) {
         try {
-            log.info("📩 Received createAppointment request: {}", appointmentRequest);
+            this.validatePatientIdandDoctorId(appointmentRequest.getPatientId(),appointmentRequest.getDoctorId());
+            log.info("Received createAppointment request: {}", appointmentRequest);
 
             if (appointmentRequest.getPatientId().isEmpty() || appointmentRequest.getDoctorId().isEmpty()) {
                 responseObserver.onError(Status.INVALID_ARGUMENT.withDescription("Missing Required Fields!").asRuntimeException());
@@ -58,7 +58,6 @@ public class AppointmentGrpcService extends AppointmentServiceGrpc.AppointmentSe
             appointmentInfoRepository.save(appointmentInfo);
 
             AppointmentResponse appointmentResponse = AppointmentResponse.newBuilder()
-
                     .setPatientId(appointmentInfo.getPatientId())
                     .setDoctorId(appointmentInfo.getDoctorId())
                     .setStatus(appointmentInfo.getStatus().name())
@@ -66,10 +65,10 @@ public class AppointmentGrpcService extends AppointmentServiceGrpc.AppointmentSe
 
             responseObserver.onNext(appointmentResponse);
             responseObserver.onCompleted();
-            log.info("✅ Appointment created: {}", appointmentResponse);
+            log.info("Appointment created: {}", appointmentResponse);
 
         } catch (Exception e) {
-            log.error("❌ Error creating appointment: {}", e.getMessage(), e);
+            log.error("Error creating appointment: {}", e.getMessage(), e);
             responseObserver.onError(Status.INTERNAL.withDescription("Server error: " + e.getMessage()).asRuntimeException());
         }
     }
@@ -104,5 +103,10 @@ public class AppointmentGrpcService extends AppointmentServiceGrpc.AppointmentSe
 
         responseObserver.onNext(response);
         responseObserver.onCompleted();
+    }
+
+
+    public void validatePatientIdandDoctorId(String patientId, String doctorId) {
+//        TODO : VALIDATE PATIENT AND DOCTOR ID EXIST WHEN CREATE APPOINTMENT
     }
 }
